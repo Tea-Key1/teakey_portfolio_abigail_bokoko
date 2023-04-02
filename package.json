@@ -1,0 +1,19 @@
+{
+  "name": "boko-tutorial",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@studio-freight/lenis": "^1.0.6",
+    "events": "^3.3.0",
+    "gsap": "^3.11.5",
+    "three": "^0.150.1",
+    "vite": "^4.1.0"
+  },
+  "dependencies": {}
+}

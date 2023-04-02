@@ -1,0 +1,516 @@
+/*全称セレクターの初期設定
+box-sizingは要素の幅と高さをどのように計算するかを決めるCSSプロパティです。
+border-boxは幅と高さに content,padding,border を含めます。しかし margin は含めません。
+margin は border の外側余白を設定するプロパティです。
+padding は border の内側余白を設定するプロパティです。
+font-family からフォント形式を決めます。ちなみに、インポート文をCSSのコードの始めの行に置かないと警告と出ます。
+h1,section,p,span,svg などの HTML エレメントの変化に 0.2s かけるようにします。これは theme の切り替えが急にならないようにするためです。
+:root は文書のルートである要素を表します。 HTML では、ふつうは <html> 要素です。
+プロパティに色を定義したオブジェクトのように使います。
+body に overflow:hidden を使うと、ビューポートへ適用されてしまいます。
+ビューポートは「ブラウザのウィンドウに表示されている領域」を指します。
+表示されている領域からはみ出ている全ての要素が非表示になり、スクロールもできません。
+
+*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: 'Montserrat', sans-serif;
+  overflow-x: hidden;
+}
+
+h1,section,p,span,svg{
+  transition: background-color 0.5s, color 0.5s;
+}
+
+:root{
+  /* Light Theme Variables */
+  --color-text-light: #333332;
+  --color-background-light: #FAF4E5;
+  --color-pink-light: #e5a1aa;
+  --color-green-light: #7AD0AC;
+  --color-blue-light: #8395CD;
+
+  /* Dark Theme Variables */
+  --color-text-dark: #FAF4E5;
+  --color-background-dark: #8395CD;
+}
+
+.light-theme{
+  --color-text: var(--color-text-light);
+  --color-backgraound: var(--color-background-light);
+  --color-pink: var(--color-pink-light);
+  --color-green: var(--color-green-light);
+  --color-blue: var(--color-blue-light);
+}
+
+.dark-theme{
+  --color-text: var(--color-text-dark);
+  --color-backgraound: var(--color-background-dark);
+  --color-pink: var(--color-text-dark);
+  --color-green: var(--color-text-dark);
+  --color-blue: var(--color-text-dark);
+}
+
+/* キャンバスエリアの設定。
+ブラウザ全面がキャンバス表示サイズになるように親要素は width: 100vw; height: 100vh; 子要素は width: 100%; height: 100% とします。
+スクロールしても表示エリアが固定されるように position: fixed とします。
+*/
+
+.experience{
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+}
+
+.experience-canvas{
+  width: 100%;
+  height: 100%;
+}
+
+/*
+Preloader を設定します。
+*/
+
+.preloader{
+  background-color: var(--color-background-light);
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  opacity: 1;
+  z-index: 9999999;
+}
+.preloader-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.loading{  display: flex;
+  justify-content: center;
+  align-items: center;}
+.circle{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 6px;
+  background-color: var(--color-pink-light);
+  animation: load 1s ease-in-out infinite;
+}
+.circle:nth-child(2){
+  animation-delay: 0.1s;
+}
+.circle:nth-child(3){
+  animation-delay: 0.2s;
+}
+
+@keyframes load{
+  0%    { transform: translateY(0) }
+  20%   { transform: translateY(-12px) }
+  40%   { transform: translateY(0) }
+}
+
+.hidden{
+  display: none;
+}
+
+/* テキストエリア全体の設定。
+全テキスト要素がキャンバスの前面に来るように  z-index(zが大きいほど手前に来る) を設定します。初期値はautoで、親要素と同じ階層に自動的になります。
+overflow は CSS の一括指定プロパティで、要素の内容が多すぎてブロック形成コンテキストに収まらない場合、つまり、要素のオーバフロー時の望ましい動作を設定します。
+overflow:hidden はテキストを必要に応じてパディング要素に合わせて切り取ります。スクロールバーは表示されず、ユーザがスクロールできるようにするための対応もありません。
+ページの全テキスト子要素を .page-wrapper の範囲内に収めたいので position:relative とします。
+*/
+
+.lenis.lenis-smooth.lenis-stopped  [data-lenis-prevent] {
+  height: auto;
+  scroll-behavior: auto;
+  overflow: hidden;
+}
+
+.page{
+  z-index: 9999;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.page-wrapper{
+  position: relative;
+}
+
+/*
+アセットをロードする前に挿入する画面を作ります。
+*/
+
+.animatedis{
+  display: inline-block;
+  transform: translateY(100%);
+}
+
+.intro-text{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--color-text);
+  transform: translate(-50%, -50%);
+}
+
+.arrow-svg-wrapper{
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  opacity: 0;
+  color: var(--color-text);
+  transform: translate(-50%, -50%);
+  animation: bounce 0.5s ease-in alternate infinite;
+}
+
+@keyframes bounce{
+  0%    { transform: translateY(0); }
+  100%  { transform: translateY(8px); }
+}
+
+/*外観モードを切り替えるトグルバーを作成します。
+親要素のである .toggle-bar の位置を position: fixed; で固定します。display-inside プロパティの flex でフレックスコンテナにします。
+フレックスボックスの主軸を row にし、インライン要素の並ぶ方向に伸びる軸となります。
+justify-content: center; は子要素を主軸に対し中央に寄せます。
+align-items はすべての直接の子要素に集合として align-self の値を設定します。
+align-times: center; は子要素を交差軸に対し中央に寄せます。
+border-radius はCSSプロパティで、外側の角を丸めます。
+:hover CSS疑似クラスは、ユーザがポインティングデバイスを使用して要素を解析したとき一致しますが、必ずアクティブ化するとは限りません。
+通常、ユーザがカーソルを表面上に置いたときにトリガーされます。
+
+*/
+
+.toggle-bar{
+  position: fixed;
+  display: flex;
+  opacity: 0;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  top: 48px;
+  right: 48px;
+  z-index: 99999;
+}
+
+.sun-wrapper,
+.moon-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-text);
+}
+
+.toggle-button{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  width: 56px;
+  height: 28px;
+  background-color: var(--color-pink);
+  border-radius: 999px;
+  margin: 0px 16px;
+  border: none;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.toggle-circle{
+  position: absolute;
+  left: 6px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-backgraound);
+  transition: all 0.2s ease-in-out;
+}
+
+.toggle-button:hover .toggle-circle{
+  transform: scale(0.9);
+}
+
+.slide{
+  left: 28px;
+}
+
+
+/*
+セクションのフォーマットを指定します。
+セクション間の余白を作るためのダミーエリア(section-margin)を設定します。
+セクションはブラウザ表示の 50% 幅で、left は margin-right:auto で左揃え。right は margin-left:auto で右添えにします。
+padding: 1000px 4%; は内側余白で上下は1000px 左右は4%に設定します。
+
+セクションはイントロエリア(section-intro-wrapper)とテキストエリア(section-detail-wrapper)の上下2つに分けます。
+section-intro-wrapper の位置は position:relative によって、自身が元居た場所から相対移動します。
+
+テキストエリアを作成します。
+border-bottom プロパティは、下ボーダーのスタイル・太さ・色を指定する際に使用します。 スタイル・太さ・色のうち、指定する値を任意の順序でスペースで区切って記述します。
+ボーダースタイルの値 solid は1本線で表示されます。
+line-height プロパティはテキストの上下余白を調整する事ができます。
+*/
+
+.section-margin{
+  height: 3000px;
+  width: 100%;
+}
+
+.section{
+  position: relative;
+  width: 50%;
+  padding: 1000px 4%;
+  margin: 0;
+  background-color: var(--color-backgraound);
+  overflow: hidden;
+}
+
+.left{
+  margin-right: auto;
+  border-top-right-radius: 700px 700px;
+  border-bottom-right-radius: 0px 0px;
+}
+
+.right{
+  margin-left: auto;
+  border-top-left-radius: 700px 700px;
+  border-bottom-left-radius: 0px 0px;
+}
+
+/*
+
+*/
+
+.progress-wrapper{
+  height: 0;
+  width: 12px;
+  z-index: 99999;
+}
+
+.progress-bar-wrapper-left{
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.progress-bar-wrapper-right{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.progress-bar{
+  height: 100vh;
+  width: 100%;
+  background-color: var(--color-pink);
+  transform-origin: top center;
+  transform: scaleY(5);
+}
+
+.section-intro-wrapper{
+  position: relative;
+  padding: 20% 5%;
+  border-bottom: 2px solid var(--color-pink);
+  padding-bottom: 400px;
+}
+
+.section-detail-wrapper{
+  position: relative;
+  padding: 20% 5%;
+}
+
+.section-heading{
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.8;
+  margin-top: 64px;
+  color: var(--color-text);
+}
+
+.section-text{
+  line-height: 2;
+  margin-top: 18px;
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+/*
+イントロエリアを作成します。
+display は子要素を要素をブロック要素とインライン要素のどちらとして扱うか、およびその子要素のために使用されるレイアウト、例えば フローレイアウト、グリッド、フレックスなどを設定します。
+display: block; は要素をブロック要素として扱い、親要素の幅の継承と、要素同士は縦配置されます。
+transform-origin は要素の座標変換 (transform)における原点を設定します。left は要素原点を左端に置きます。
+*/
+
+.section-title{
+  position: relative;
+  color: var(--color-pink);
+}
+
+.section-title-text{
+  display: block;
+  font-size: 40px;
+  font-weight: 500;
+  transform-origin: left;
+  transform: skewY(25deg);
+  z-index: 5;
+  text-transform: uppercase;
+  color: var(--color-pink);
+}
+
+.styleOne,
+.styleTwo,
+.styleThree{
+  position: absolute;
+  display: block;
+  width: 100%;
+  max-width: 278px;
+  height: 60px;
+  border: 1px solid var(--color-pink);
+  transform-origin: left;
+  transform: skewY(-25deg);
+}
+
+.styleOne{
+  top: 0px;
+}
+
+.styleTwo{
+  top: 80px;
+}
+
+.styleThree{
+  top: 80px;
+  transform: skewY(25deg);
+  background-color: var(--color-pink);
+}
+
+.section-number{
+  position: absolute;
+  bottom: 15px;
+  right: 0;
+  color: var(--color-pink);
+  font-size: 24px;
+}
+
+/*
+ヒーローヘッダーを実装する hero セクションを作成します。
+このセクションの大きさは全表示領域としたいため、セクションの親要素.hero の幅と高さをそれぞれ100vw,100vhとします。
+セクションの全テキスト子要素を .hero-wrapper の範囲内に収めたいので position:relative とします。
+コンテンツを読みやすい幅に包むため、CSSでのラッパーの実装をします。 .hero-wrapper にマージンや中央揃え、ラッパーのバリエーションを指定します。
+.hero-wrapper の幅を160px分だけ減らし、左右均等に余白ができるように margin: 0 auto; で中央揃えします。
+max-width は内容領域における幅の最大値を指定するプロパティです。最大値を指定しておくと、要素の幅が一定範囲を超えることがありません。
+子要素である.hero-main と.hero-second は position:absolute とし、位置を決めます。
+
+*/
+
+.hero{
+  width: 100vw;
+  height: 100vh;
+}
+
+.hero-wrapper{
+  position:relative;
+  height:100%;
+  width: calc(100% - 160px);
+  margin: 0 auto;
+  max-width: 1100px;
+}
+
+.hero-main{
+  position: absolute;
+  bottom: 268px;
+  left: 0;
+}
+
+.hero-second{
+  position: absolute;
+  top: calc(50% - 120px);
+  right: 0;
+  color: var(--color-text);
+}
+
+.hero-main-title{
+  font-size: 64px;
+  color: var(--color-text);
+}
+
+.hero-main-description{
+  font-size: 32px;
+  color: var(--color-text);
+}
+
+.hero-second-subheading{
+  font-size: 32px;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+/* 他の色 */
+
+.blue-text{
+  color: var(--color-blue);
+}
+
+.blue-border{
+  border-color: var(--color-blue);
+}
+
+.blue-background{
+  background-color: var(--color-blue);
+}
+
+.green-text{
+  color: var(--color-green);
+}
+
+.green-border{
+  border-color: var(--color-green);
+}
+
+.green-background{
+  background-color: var(--color-green);
+}
+
+/* メディアクエリ */
+
+@media (max-width: 968px){
+  .section{
+    width: 100%;
+  }
+  .progress-bar-wrapper-left{
+    right: 0;
+    left: auto;
+  }
+  .hero-main{
+    bottom: 120px;
+  }
+  .hero-second{
+    top: 160px;
+  }
+  .hero-wrapper{
+    width: calc(100% - 60px);
+  }
+  .hero-main-title{
+    font-size: 32px;
+  }
+  .hero-main-description{
+    font-size: 18px;
+  }
+  .hero-second-subheading{
+    font-size: 18px;
+  }
+}
