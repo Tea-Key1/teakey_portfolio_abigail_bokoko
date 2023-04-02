@@ -12,7 +12,7 @@ body に overflow:hidden を使うと、ビューポートへ適用されてし�
 表示されている領域からはみ出ている全ての要素が非表示になり、スクロールもできません。
 
 */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap');
+@import url('https://fonts.googleapis.com/css2? family= Montserrat:ital@1 & display=swap');
 
 *{
   margin: 0;
